@@ -1,33 +1,37 @@
 import React from "react";
 import CartWidget from "./CartWidget";
-import logo from "../assets/img/logo-adidas.png";
+import logo from "../img/logo-adidas.png";
+import { NavLink } from "react-router-dom";
 
 function NavBar() {
-  const handleLogoClick = () => {
-    window.location.href = "../index.html";
-  };
-
   return (
     <div className="container__nav">
-      <div className="logo" onClick={handleLogoClick}>
-        <img src={logo} alt="Logo Adidas" />
+      <div className="logo">
+        <NavLink to="/">
+          <img src={logo} alt="Logo Adidas" />
+        </NavLink>
       </div>
       <nav>
         <ul className="links">
-          <li className="nav__links">
-            <a href="../index.html">Inicio</a>
+          <li>
+            <NavLink to="/Camisetas" className="nav__links">
+              Camisetas
+            </NavLink>
           </li>
-          <li className="nav__links">
-            <a href="/mujer">Mujer</a>
+          <li>
+            <NavLink to="/Camperas" className="nav__links">
+              Camperas
+            </NavLink>
           </li>
-          <li className="nav__links">
-            <a href="/hombre">Hombre</a>
+          <li>
+            <NavLink to="/Pantalones" className="nav__links">
+              Pantalones
+            </NavLink>
           </li>
-          <li className="nav__links">
-            <a href="/niños">Niños</a>
-          </li>
-          <li className="nav__links">
-            <a href="/deporte">Deporte</a>
+          <li>
+            <NavLink to="/Zapatillas" className="nav__links">
+              Zapatillas
+            </NavLink>
           </li>
         </ul>
       </nav>
