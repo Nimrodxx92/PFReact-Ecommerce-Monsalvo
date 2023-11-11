@@ -1,0 +1,35 @@
+.item {
+  border: 1px solid #696868;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #dfe2e2;
+}
+
+.item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.item h3 {
+  font-size: 0.6em;
+  margin-top: 10px;
+}
+
+.item p {
+  font-size: 0.5em;
+  margin-top: 10px;
+}
+
+.button-details {
+  background-color: #6a6c6e;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-details:hover {
+  background-color: #2f3031;
+}
