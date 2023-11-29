@@ -9,6 +9,10 @@
   padding: 20px;
 }
 
+.cart__container h2 {
+  font-size: 25px;
+}
+
 .cart__container p {
   margin-top: 10px;
 }
@@ -24,6 +28,11 @@
 .cart__item img {
   max-width: 25%;
   margin-right: 20px;
+}
+
+.genero {
+  font-size: 15px;
+  margin-bottom: 5px;
 }
 
 .cart__item__details h3 {

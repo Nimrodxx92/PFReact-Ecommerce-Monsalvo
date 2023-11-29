@@ -4,13 +4,8 @@ import { Link } from "react-router-dom";
 import { useCart } from "../CartContext/CartContext";
 
 function Cart() {
-  const {
-    cartItems,
-    removeCartItem,
-    clearCart,
-    getTotalPrice,
-    updateCartItem,
-  } = useCart();
+  const { cartItems, removeCartItem, clearCart, getTotalPrice } = useCart();
+  console.log(cartItems);
 
   const handleRemoveItem = (item) => {
     removeCartItem(item);
@@ -18,10 +13,6 @@ function Cart() {
 
   const handleClearCart = () => {
     clearCart();
-  };
-
-  const handleQuantityChange = (item, newQuantity) => {
-    updateCartItem({ ...item, cantidad: newQuantity });
   };
 
   return (
@@ -35,25 +26,15 @@ function Cart() {
             {cartItems.map((item) => (
               <li key={item.id}>
                 <div className="cart__item">
-                  <img src={item.imagen} alt={item.nombre} />
+                  <img src={item.img} alt={item.nombre} />
                   <div className="cart__item__details">
+                    <p className="genero">
+                      {item.categoria} / {item.genero}
+                    </p>
                     <h3>{item.nombre}</h3>
-                    <p>Categoría: {item.categoria}</p>
-                    <p>Género: {item.genero}</p>
                     <p>Precio: ${item.precio}</p>
                     <p>
-                      Cantidad:
-                      <input
-                        type="number"
-                        value={item.cantidad}
-                        onChange={(e) =>
-                          handleQuantityChange(
-                            item,
-                            parseInt(e.target.value, 10)
-                          )
-                        }
-                        min="1"
-                      />
+                      Cantidad: <span>{item.cantidad}</span>
                     </p>
                     <p>Total: ${item.precio * item.cantidad}</p>
                     <button

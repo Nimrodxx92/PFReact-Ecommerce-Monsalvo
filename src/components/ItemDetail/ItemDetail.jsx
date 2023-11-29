@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import CartModal from "../CartModal/CartModal";
 
 function ItemDetail({ producto }) {
-  const { nombre, precio, imagen, descripcion, categoria, genero } = producto;
+  const { nombre, precio, img, descripcion, categoria, genero } = producto;
   const descripcionProducto = descripcion ? descripcion.split(". ") : [];
 
   return (
     <div className="item__detail">
-      <img src={imagen} alt={nombre} />
+      <img src={img} alt={nombre} />
       <div className="text__content">
         <p className="category">
           {categoria} - {genero}

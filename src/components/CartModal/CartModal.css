@@ -67,3 +67,13 @@
   margin-top: 10px;
   font-size: 15px;
 }
+
+.addProducts {
+  background-color: rgb(27, 27, 27);
+}
+
+.title-add {
+  font-size: 22px;
+  font-family: Roboto;
+  text-transform: uppercase;
+}

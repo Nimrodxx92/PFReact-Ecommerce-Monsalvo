@@ -2,9 +2,15 @@ import "./ItemListContainer.css";
 import React, { useState, useEffect } from "react";
 import ItemList from "../ItemList/ItemList";
 import { useParams } from "react-router-dom";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
-function ItemListContainer(props) {
+function ItemListContainer(saludar) {
   const [productos, setProductos] = useState([]);
   const { idCategoria } = useParams();
 
@@ -13,19 +19,26 @@ function ItemListContainer(props) {
       const db = getFirestore();
       const productData = [];
 
-      const collections = ["camisetas", "Camperas", "Pantalones", "Zapatillas"];
-
       try {
-        for (const collectionName of collections) {
-          const querySnapshot = await getDocs(collection(db, collectionName));
-          querySnapshot.forEach((doc) => productData.push(doc.data()));
-        }
+        const q = idCategoria
+          ? query(
+              collection(db, "Productos"),
+              where("categoria", "==", idCategoria)
+            )
+          : collection(db, "Productos");
 
-        const filteredProducts = idCategoria
-          ? productData.filter((producto) => producto.categoria === idCategoria)
-          : productData.sort(() => Math.random() - 0.5);
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) =>
+          productData.push({ ...doc.data(), id: doc.id })
+        );
 
-        setProductos(filteredProducts);
+        setProductos(
+          idCategoria
+            ? productData.filter(
+                (producto) => producto.categoria === idCategoria
+              )
+            : productData.sort(() => Math.random() - 0.5)
+        );
       } catch (error) {
         console.error("Error al obtener productos:", error);
       }
@@ -36,7 +49,7 @@ function ItemListContainer(props) {
 
   return (
     <div className="title__container">
-      <h1>{props.greeting}</h1>
+      <h1>{saludar.greeting}</h1>
       <ItemList productos={productos} />
     </div>
   );

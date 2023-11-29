@@ -1,8 +1,9 @@
+import "./ItemDetailContainer.css";
 import React, { useEffect, useState } from "react";
 import ItemDetail from "../ItemDetail/ItemDetail";
 import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebase";
+import db from "../../firebase/firebase";
 
 const ItemDetailContainer = () => {
   const [producto, setProducto] = useState(null);
@@ -10,7 +11,7 @@ const ItemDetailContainer = () => {
 
   const getSelected = async (idDetalle) => {
     try {
-      const document = doc(db, "camisetas", idDetalle);
+      const document = doc(db, "Productos", idDetalle);
       const response = await getDoc(document);
       const result = { id: response.id, ...response.data() };
 
@@ -25,8 +26,8 @@ const ItemDetailContainer = () => {
   }, [id]);
 
   return (
-    <div>
-      {producto ? <ItemDetail producto={producto} /> : <div>Cargando...</div>}
+    <div className="loading-products">
+      {producto ? <ItemDetail producto={producto} /> : <p>Cargando...</p>}
     </div>
   );
 };

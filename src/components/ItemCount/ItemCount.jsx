@@ -1,19 +1,25 @@
 import "./ItemCount.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-function ItemCount({ precioUnitario, cantidadInicial, onCantidadChange }) {
+function ItemCount({ stock, cantidadInicial, onCantidadChange }) {
   const [count, setCount] = useState(cantidadInicial || 1);
 
+  useEffect(() => {
+    if (count < 1) {
+      setCount(1);
+    } else if (count > stock) {
+      setCount(stock);
+    }
+
+    onCantidadChange(count);
+  }, [count, stock, onCantidadChange]);
+
   const incrementCount = () => {
-    setCount(count + 1);
-    onCantidadChange(count + 1);
+    setCount((prevCount) => Math.min(prevCount + 1, stock));
   };
 
   const decrementCount = () => {
-    if (count > 1) {
-      setCount(count - 1);
-      onCantidadChange(count - 1);
-    }
+    setCount((prevCount) => Math.max(prevCount - 1, 1));
   };
 
   return (

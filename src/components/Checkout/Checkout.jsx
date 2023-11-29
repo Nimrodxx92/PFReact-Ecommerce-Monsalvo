@@ -1,120 +1,134 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import ItemCount from "../ItemCount/ItemCount";
-import CartModal from "../CartModal/CartModal";
+import "./Checkout.css";
+import { useCart } from "../CartContext/CartContext";
+import { collection, addDoc } from "firebase/firestore";
+import db from "../../firebase/firebase";
 
 function Checkout() {
-  const [name, setName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [confirmEmail, setConfirmEmail] = useState("");
-  const [orderItems, setOrderItems] = useState([]);
+  const { cartItems, getTotalPrice, clearCart } = useCart();
+  const [orderID, setOrderID] = useState();
+  const [buyer, setBuyer] = useState({
+    Nombre: "",
+    Email: "",
+    Telefono: "",
+  });
+  const [loading, setLoading] = useState(false);
 
-  const handleItemCountChange = (itemId, newQuantity) => {
-    setOrderItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === itemId
-          ? {
-              ...item,
-              quantity: newQuantity,
-              importeTotal: newQuantity * item.precio,
-            }
-          : item
-      )
-    );
-  };
+  const { Nombre, Email, Telefono } = buyer;
 
-  const handleCheckout = () => {
-    console.log("Orden finalizada:", {
-      name,
-      lastName,
-      phone,
-      email,
-      orderItems,
+  const handleInputChange = (e) => {
+    setBuyer({
+      ...buyer,
+      [e.target.name]: e.target.value,
     });
   };
 
+  const generateOrder = async (data) => {
+    try {
+      setLoading(true);
+      const ordersCollection = collection(db, "Orders");
+      const orderRef = await addDoc(ordersCollection, data);
+      setOrderID(orderRef.id);
+      clearCart();
+    } catch (error) {
+      console.error("Error al generar la orden:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!cartItems) {
+      console.error("El carrito es undefined o null");
+      return;
+    }
+    const dia = new Date();
+    const items = cartItems.map((e) => {
+      return {
+        nombre: e.nombre,
+        precio: e.precio,
+        cantidad: e.cantidad,
+      };
+    });
+    const total = getTotalPrice();
+    const data = {
+      buyer: {
+        Nombre,
+        Email,
+        Telefono,
+      },
+      items,
+      dia,
+      total,
+    };
+    generateOrder(data);
+  };
+
   return (
-    <div className="checkout">
-      <h2>Checkout</h2>
-      {orderItems.length === 0 ? (
-        <p>El carrito está vacío.</p>
-      ) : (
-        <ul>
-          {orderItems.map((item) => (
+    <>
+      <div className="checkout">
+        <h1>Finalizar Compra</h1>
+        <ul className="orders__items">
+          {cartItems.map((item) => (
             <li key={item.id}>
-              {item.name} - Cantidad: {item.quantity} - Importe Total: $
-              {item.importeTotal}
+              <p>
+                {item.nombre} - ${item.precio} / Cantidad: {item.cantidad}
+              </p>
             </li>
           ))}
         </ul>
-      )}
-
-      <form>
-        <label>
-          Nombre:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
-        <label>
-          Apellido:
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </label>
-        <label>
-          Teléfono:
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-        </label>
-        <label>
-          Email:
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-        <label>
-          Confirmar Email:
-          <input
-            type="email"
-            value={confirmEmail}
-            onChange={(e) => setConfirmEmail(e.target.value)}
-          />
-        </label>
-
-        {orderItems.map((item) => (
-          <ItemCount
-            key={item.id}
-            cantidadInicial={item.quantity}
-            precioUnitario={item.precio}
-            onCantidadChange={(newQuantity) =>
-              handleItemCountChange(item.id, newQuantity)
-            }
-          />
-        ))}
-
-        <button type="button" onClick={handleCheckout}>
-          Finalizar Orden
-        </button>
-      </form>
-
-      <div className="cart-buttons">
-        <Link to="/">Volver a la tienda</Link>
       </div>
-
-      <CartModal orderItems={orderItems} />
-    </div>
+      {!orderID && (
+        <div className="checkout__form">
+          <h4>Completar Datos:</h4>
+          <form className="form" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="Nombre"
+              placeholder="Nombre"
+              value={Nombre}
+              onChange={handleInputChange}
+              required
+            />
+            <input
+              type="email"
+              name="Email"
+              placeholder="Email"
+              value={Email}
+              onChange={handleInputChange}
+              required
+            />
+            <input
+              name="Telefono"
+              placeholder="Telefono"
+              value={Telefono}
+              onChange={handleInputChange}
+              required
+            />
+            <input
+              type="submit"
+              value="Finalizar Compra"
+              className="finish-orders"
+              disabled={loading}
+            />
+          </form>
+          {loading && <div className="spinner"></div>}
+        </div>
+      )}
+      <div>
+        {orderID && (
+          <div className="order__placed">
+            <h5>Compra finalizada con éxito</h5>
+            <p>{`Su código de compra es: ${orderID}`}</p>
+            <Link to="/">
+              <button>Realizar otra compra</button>
+            </Link>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 

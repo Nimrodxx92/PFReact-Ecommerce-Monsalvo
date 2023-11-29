@@ -3,11 +3,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Item({ producto }) {
-  const { id, nombre, precio, imagen } = producto;
+  const { id, nombre, precio, img } = producto;
 
   return (
     <div className="item">
-      <img src={imagen} alt={nombre} />
+      <img src={img} alt={nombre} />
       <h3>{nombre}</h3>
       <p>Precio: ${precio}</p>
       <Link to={`/detalle/${id}`}>

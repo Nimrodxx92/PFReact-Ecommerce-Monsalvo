@@ -2,9 +2,11 @@ import "./CartModal.css";
 import React, { useState } from "react";
 import ItemCount from "../ItemCount/ItemCount";
 import { useCart } from "../CartContext/CartContext";
+import Swal from "sweetalert2";
 
 function CartModal({ producto }) {
-  const { nombre, precio, imagen, descripcion } = producto;
+  const { nombre, precio, img, descripcion, stock, genero, categoria } =
+    producto || {};
   const [cantidadAgregada, setCantidadAgregada] = useState(1);
   const [importeTotal, setImporteTotal] = useState(precio);
   const [showModal, setShowModal] = useState(false);
@@ -25,8 +27,20 @@ function CartModal({ producto }) {
       nombre,
       precio,
       cantidad: cantidadAgregada,
-      imagen,
+      img,
       descripcion,
+      genero,
+      categoria,
+    });
+    Swal.fire({
+      position: "top-center",
+      icon: "success",
+      title: "Producto agregado al carrito",
+      showConfirmButton: false,
+      timer: 1500,
+      customClass: {
+        title: "title-add",
+      },
     });
     setShowModal(false);
   };
@@ -39,7 +53,7 @@ function CartModal({ producto }) {
       {showModal && (
         <div className="modal__pages">
           <div className="cart__modal">
-            <img src={imagen} alt={nombre} />
+            <img src={img} alt={nombre} />
             <div className="cart__info">
               <button className="close" onClick={() => setShowModal(false)}>
                 &times;
@@ -52,6 +66,7 @@ function CartModal({ producto }) {
               <ItemCount
                 cantidad={cantidadAgregada}
                 precioUnitario={precio}
+                stock={stock}
                 onCantidadChange={handleActualizarCantidad}
               />
               <p>Importe Total: ${importeTotal}</p>
@@ -59,7 +74,7 @@ function CartModal({ producto }) {
                 <button onClick={() => setShowModal(false)}>
                   Seguir comprando
                 </button>
-                <button onClick={handleAgregarAlCarrito}>
+                <button className="add-cart" onClick={handleAgregarAlCarrito}>
                   Agregar al carrito
                 </button>
               </div>

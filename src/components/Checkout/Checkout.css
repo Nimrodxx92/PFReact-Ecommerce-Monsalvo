@@ -1,0 +1,88 @@
+.checkout {
+  padding: 20px;
+}
+
+.checkout h1 {
+  font-size: 25px;
+}
+
+.orders__items {
+  margin-top: 10px;
+  padding: 0px;
+  list-style: none;
+}
+
+.orders__items p {
+  line-height: 25px;
+}
+
+.checkout__form {
+  padding: 20px;
+}
+
+.checkout__form h4 {
+  margin-bottom: 10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form input {
+  width: 30%;
+  padding: 5px;
+  box-sizing: border-box;
+  margin: 3px;
+  border: 1px solid rgb(97, 96, 96);
+  border-radius: 5px;
+}
+
+.finish-orders {
+  background-color: rgb(21, 194, 21);
+  color: black;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.order__placed {
+  margin-left: 20px;
+}
+
+.order__placed h5 {
+  font-size: 20px;
+}
+
+.order__placed p {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.order__placed button {
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 20px;
+  margin-top: 10px;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #3498db;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  margin-left: 14%;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
