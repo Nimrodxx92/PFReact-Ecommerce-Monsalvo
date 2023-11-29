@@ -41,3 +41,4 @@ Para que el proyecto se logre realizar de una manera esperada utilicé las sigui
 ⚡ React-Firebase: base de datos
 
 ## Dirección del proyecto
+https://pre-entrega2-ecommerce-monsalvo-ea1zqgvfn-nimrodxx92s-projects.vercel.app/
